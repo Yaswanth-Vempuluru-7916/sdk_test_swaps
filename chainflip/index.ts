@@ -3,9 +3,9 @@
  * 
  * yarn add @chainflip/sdk
  * 
- * Environment Variables:
- * - SECRET_KEY: Private key of the user wallet (in .env)
- * - ALCHEMY_TOKEN  (in .env)
+ * Environment Variables(.env) : 
+ * - PRIVATE_KEY: Private key of the user wallet 
+ * - ALCHEMY_TOKEN  
  */
 
 import { Assets, Chains, SwapSDK } from "@chainflip/sdk/swap";
@@ -16,7 +16,7 @@ dotenv.config();
 
 async function main() {
 
-  // 1. Initialize SwapSDK: specify network (e.g., 'perseverance' testnet , 'mainnet' for mainnet) and enabled features like DCA
+  // 1. Initialize SwapSDK: specify network (e.g., 'perseverance' testnet , 'mainnet' for mainnet)
   const options = {
     network: "perseverance" as const, // Testnet network identifier
     enabledFeatures: { dca: true },   // opt into dollar-cost averaging support - allows for multiple smaller swaps over time
@@ -32,7 +32,7 @@ async function main() {
 
   // 3. Create a wallet using private key and attach to Ethereum provider
   // Wallet needs to be connected to the source chain provider for transaction signing
-  const wallet = new Wallet(process.env.SECRET_KEY!, ethProvider);
+  const wallet = new Wallet(process.env.PRIVATE_KEY!, ethProvider);
 
   // 4. Log current balances for both chains (in wei)
   const { ethBalance, arbBalance } = await getBalances(wallet, ethProvider, arbProvider);
@@ -105,7 +105,6 @@ async function main() {
   // 9. Optionally check swap status by manual transaction hash
   // Useful for tracking previously initiated swaps
   const status = await swapSDK.getStatusV2({
-    // id: "0x42ae0b9cfefc45141bb234d45159d6451f18d7548e762edf435acb4ab7ed73c9",
     id: "0xf8053b21444a25058bedb7627c3d1d09d7b14241d1d0ed39eba9328ff2db43da",
   });
   console.log("status", status);

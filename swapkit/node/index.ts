@@ -14,7 +14,11 @@ dotenv.config();
 /* ---------------------- Constants ---------------------- */
 // SwapKit API key for authentication with SwapKit services
 //Generate here : https://partners.swapkit.dev/api-keys
-const SWAPKIT_API = process.env.SWAPKIT_API || "";
+
+const SWAPKIT_API = process.env.SWAPKIT_API;
+if (!SWAPKIT_API) {
+  throw new Error("SWAPKIT_API environment variable is not set.");
+}
 // seed phrase for wallet connection and transaction signing
 const SEED_PHRASE = process.env.SEED_PHRASE;
 if (!SEED_PHRASE) {
@@ -48,6 +52,7 @@ async function main() {
   // 1. Connect Wallet
   // Connect keystore wallet using seed phrase for the specified blockchain
   await client.connectKeystore([Chain.Arbitrum], SEED_PHRASE as string);
+  
   // Retrieve wallet information including balance for the connected chain
   const wallet = await client.getWalletWithBalance(Chain.Arbitrum);
   console.log("Connected Address:", wallet.address);
